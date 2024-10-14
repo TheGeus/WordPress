@@ -1144,6 +1144,11 @@ function add_query_arg( ...$args ) {
 		}
 	}
 
+	// Ensure that $uri is a string before using strstr() to avoid passing null, which causes a deprecation warning in PHP 8.1.
+	if (!is_string($uri)) {
+        	$uri = '';
+    	}
+
 	$frag = strstr( $uri, '#' );
 	if ( $frag ) {
 		$uri = substr( $uri, 0, -strlen( $frag ) );
@@ -7297,6 +7302,10 @@ function _device_can_upload() {
  * @return bool True if the path is a stream URL.
  */
 function wp_is_stream( $path ) {
+	if ( !is_string( $path ) ) {
+        	// $path isn't a valid string.
+        	return false;
+    	}
 	$scheme_separator = strpos( $path, '://' );
 
 	if ( false === $scheme_separator ) {
